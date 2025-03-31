@@ -1,0 +1,322 @@
+openapi: 3.0.0
+info:
+  title: Query Execution API
+  version: 1.0.0
+  description: API for executing and managing asynchronous queries.
+
+servers:
+  - url: https://api.allium.so/api/v1
+    description: Production server
+
+paths:
+  /explorer/queries/{query_id}/run-async:
+    post:
+      summary: Execute Query Async
+      description: Create a new asynchronous query run.
+      operationId: executeQueryAsync
+      parameters:
+        - name: query_id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The ID of the query to execute.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                parameters:
+                  type: object
+                  description: Key-value map of parameter names and their respective values.
+                  additionalProperties:
+                    type: string
+                run_config:
+                  type: object
+                  description: Query run configuration to use when creating the query run.
+                  properties:
+                    limit:
+                      type: integer
+                      description: The query row limit to use for this query run.
+                      default: 1000
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  run_id:
+                    type: string
+                  query_id:
+                    type: string
+                  query_config:
+                    type: object
+                    properties:
+                      sql:
+                        type: string
+                      limit:
+                        type: integer
+                      parameters:
+                        type: object
+                        additionalProperties:
+                          type: string
+                      datastore_to_use:
+                        type: string
+                  creator_id:
+                    type: string
+                  created_at:
+                    type: string
+                    format: date-time
+                  completed_at:
+                    type: string
+                    format: date-time
+                  status:
+                    type: string
+                    enum: [created, queued, running, success, failed, canceled]
+                  stats:
+                    type: object
+                    properties:
+                      start_time:
+                        type: string
+                        format: date-time
+                      end_time:
+                        type: string
+                        format: date-time
+                      datastore:
+                        type: string
+                      sql:
+                        type: string
+                      row_count:
+                        type: integer
+                      data_size_bytes:
+                        type: integer
+                  error:
+                    type: string
+                  results:
+                    type: object
+                    properties:
+                      storage_type:
+                        type: string
+                  zed_token:
+                    type: string
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  detail:
+                    type: string
+
+  /explorer/query-runs:
+    get:
+      summary: Get Latest Query Run Handler
+      description: Retrieve the latest query run information for a query.
+      operationId: getLatestQueryRun
+      parameters:
+        - name: query_id
+          in: query
+          required: true
+          schema:
+            type: string
+          description: The ID of the query to retrieve the latest run for.
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  run_id:
+                    type: string
+                  query_id:
+                    type: string
+                  query_config:
+                    type: object
+                    properties:
+                      sql:
+                        type: string
+                      limit:
+                        type: integer
+                      parameters:
+                        type: object
+                        additionalProperties:
+                          type: string
+                      datastore_to_use:
+                        type: string
+                  creator_id:
+                    type: string
+                  created_at:
+                    type: string
+                    format: date-time
+                  completed_at:
+                    type: string
+                    format: date-time
+                  status:
+                    type: string
+                    enum: [created, queued, running, success, failed, canceled]
+                  stats:
+                    type: object
+                    properties:
+                      start_time:
+                        type: string
+                        format: date-time
+                      end_time:
+                        type: string
+                        format: date-time
+                      datastore:
+                        type: string
+                      sql:
+                        type: string
+                      row_count:
+                        type: integer
+                      data_size_bytes:
+                        type: integer
+                  error:
+                    type: string
+                  results:
+                    type: object
+                    properties:
+                      storage_type:
+                        type: string
+                  zed_token:
+                    type: string
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  detail:
+                    type: string
+
+  /explorer/query-runs/{run_id}/status:
+    get:
+      summary: Get Query Run Status
+      description: Retrieve the status of a query run.
+      operationId: getQueryRunStatus
+      parameters:
+        - name: run_id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The ID of the query run to retrieve the status for.
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: string
+                enum: [created, queued, running, success, failed, canceled]
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  detail:
+                    type: string
+
+  /explorer/query-runs/{run_id}/results:
+    get:
+      summary: Get Query Run Results
+      description: Retrieve the results of a query run.
+      operationId: getQueryRunResults
+      parameters:
+        - name: run_id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The ID of the query run to retrieve the results for.
+        - name: f
+          in: query
+          required: false
+          schema:
+            type: string
+            enum: [json]
+            default: json
+          description: The format of the response.
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  sql:
+                    type: string
+                  data:
+                    type: array
+                    items:
+                      type: object
+                  meta:
+                    type: object
+                    properties:
+                      columns:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            name:
+                              type: string
+                            data_type:
+                              type: string
+                  queried_at:
+                    type: string
+                    format: date-time
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  detail:
+                    type: string
+
+  /explorer/query-runs/{run_id}/cancel:
+    post:
+      summary: Cancel Query Run
+      description: Cancel a query run.
+      operationId: cancelQueryRun
+      parameters:
+        - name: run_id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The ID of the query run to cancel.
+      responses:
+        '200':
+          description: Successful Response
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  detail:
+                    type: string
+
+security:
+  - ApiKeyAuth: []
+
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-KEY

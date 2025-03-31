@@ -1,0 +1,65 @@
+---
+title: "Transactions"
+---
+
+Transactions in Bitcoin are cryptographically signed instructions to transfer ownership of bitcoin between accounts. They originate from a user's wallet and update the Bitcoin blockchain. Transactions are broadcast to the network and require verification by miners. Once verified, miners include them in a block, which is added to the blockchain, confirming the transfer. Bitcoin transactions must reference previous unspent outputs as inputs, and any unused portion can be returned as change or used to pay transaction fees.
+
+In Bitcoin, transaction inputs and outputs follow a First-In-First-Out (FIFO) model. Inputs reference unspent transaction outputs (UTXOs) from previous transactions, consuming them in the order they are added. Outputs are created as new UTXOs, which can be spent in future transactions. When a transaction is processed, the oldest unspent inputs are used first, and any leftover value can be sent as change to a new output or used for transaction fees. This FIFO approach helps maintain the consistency and traceability of funds on the blockchain.
+
+### Sample Query
+
+Select random transaction and get all inputs and outputs
+
+Copy
+
+```
+with transaction_hash as (
+    select hash from bitcoin.transactions limit 1
+), inputs as (
+    select 
+        spent_utxo_id, 
+        address0, 
+        value, 
+        'input' as input_or_output, 
+        transaction_hash
+    from bitcoin.enriched_inputs 
+    where transaction_hash = (select hash from transaction_hash)
+), outputs as (
+    select 
+        utxo_id, 
+        address0, 
+        value, 
+        'input' as input_or_output, 
+        transaction_hash
+    from bitcoin.outputs 
+    where transaction_hash = (select hash from transaction_hash)
+)
+select * from inputs 
+union
+select * from outputs;
+```
+
+### Table Columns
+
+This table is indexed by (hash, block\_timestamp, block\_hash) and has indicies on block\_number and block\_timestamp. Please use either index for faster queries.
+
+| Column Name      | Description                                                                                                                                                                                                                                                      | Example                                                          |
+| ---------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------- |
+| hash             | Transaction hash.                                                                                                                                                                                                                                                | af840d1abd0b6857c197ec0e1bdc5b852db03f0bc9aac2f9472b5513155d9330 |
+| size             | The serialized transaction size.                                                                                                                                                                                                                                 | 223                                                              |
+| virtual\_size    | The virtual transaction size (differs from size for witness transactions). Virtual size is a way of measuring the size of a transaction that takes into account the amount of data needed to create the transaction, as well as the priority of the transaction. | 141                                                              |
+| version          | The transaction version number.                                                                                                                                                                                                                                  | 1                                                                |
+| lock\_time       | The transaction lock time.                                                                                                                                                                                                                                       | 0                                                                |
+| block\_hash      | Unique hash of the transaction.                                                                                                                                                                                                                                  | 00000000000000000001e89fb4c1b662debc5200b58e53295f509c98416818c2 |
+| block\_number    | Block hash of the transaction.                                                                                                                                                                                                                                   | 779,762                                                          |
+| block\_timestamp | Block number or block height of the transaction input.                                                                                                                                                                                                           | 2023-03-07 16:59:59                                              |
+| index            | transaction index number                                                                                                                                                                                                                                         | 1                                                                |
+| input\_count     | The total number of inputs in the transaction.                                                                                                                                                                                                                   | 1                                                                |
+| output\_count    | The total number of outputs in the transaction.                                                                                                                                                                                                                  | 2                                                                |
+| input\_value     | Total value of inputs in the transaction.                                                                                                                                                                                                                        | 4,303,064                                                        |
+| output\_value    | Total value of outputs in the transaction.                                                                                                                                                                                                                       | 4,300,103                                                        |
+| is\_coinbase     | The transaction is a coinbase transaction, which is the first transaction in a block                                                                                                                                                                             | FALSE                                                            |
+| fee              | The transaction fee paid to the miner. Calculated by the substracting the `input_value` with the `output_value.`                                                                                                                                                 | 2,961                                                            |
+| weight           | transaction weight                                                                                                                                                                                                                                               | 100                                                              |
+
+

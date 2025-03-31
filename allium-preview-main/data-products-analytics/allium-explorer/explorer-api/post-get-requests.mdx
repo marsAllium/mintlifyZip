@@ -1,0 +1,470 @@
+---
+title: "Explorer API Reference"
+---
+
+## Introduction
+
+The **Explorer API** allows you to
+
+* [Create a new query run for a query](/data-products-analytics/allium-explorer/explorer-api/post-get-requests#create-a-new-asynchronously-query-run)
+
+* [Retrieve the latest query run information for a query](/data-products-analytics/allium-explorer/explorer-api/post-get-requests#retrieve-the-latest-query-run-information-for-a-query)
+
+* [Retrieve the status of a query run](/data-products-analytics/allium-explorer/explorer-api/post-get-requests#retrieve-the-status-of-a-query-run)
+
+* [Retrieve the results of a query run](/data-products-analytics/allium-explorer/explorer-api/post-get-requests#retrieve-the-results-of-a-query-run)
+
+* [Cancel a query run](/data-products-analytics/allium-explorer/explorer-api/post-get-requests#cancel-a-query-run)
+
+## Create a new asynchronous query run
+
+### Execute Query Async
+
+post
+
+/api/v1/explorer/queries/\{query\_id}/run-async
+
+Authorizations
+
+Path parameters
+
+query\_idstringrequired
+
+Body
+
+parametersobjectrequired
+
+### Show Parameters
+
+run\_configall of · default: \[object Object]
+
+### Show QueryRunRequestConfig
+
+Responses
+
+200
+
+Successful Response
+
+application/json
+
+422
+
+Validation Error
+
+application/json
+
+cURL
+
+JavaScript
+
+Python
+
+HTTP
+
+Copy
+
+```
+curl -L \
+  --request POST \
+  --url '/api/v1/explorer/queries/{query_id}/run-async' \
+  --header 'X-API-KEY: YOUR_API_KEY' \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "parameters": {
+      "ANY_ADDITIONAL_PROPERTY": "text"
+    },
+    "run_config": {}
+  }'
+```
+
+Test it
+
+200
+
+422
+
+```
+No body
+```
+
+Successful Response
+
+### Request fields
+
+| Field name         | Description                                                                                                                                                                                                                                                                                               |
+| ------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `parameters`       | Key-value map of parameter names and their respective values.                                                                                                                                                                                                                                             |
+| `run_config`       | Query run configuration to use when creating the query run.                                                                                                                                                                                                                                               |
+| `run_config.limit` | The query row limit to use for this query run.We currently allow up to **250,000 rows of data** (that can be increased on request) to be exported through the API for a single query, this limit is put in to prevent mishaps from happening when users forget to put `LIMIT` at the end of their queries |
+
+### Example
+
+cURLPythonTypescript
+
+Copy
+
+```
+curl -X 'POST' \
+  'https://api.allium.so/api/v1/explorer/queries/{query_id}/run-async' \
+  -H 'accept: application/json' \
+  -H 'Content-Type: application/json' \
+  -H 'X-API-KEY: <YOUR API KEY>' \
+  -d '{
+  "parameters": {},
+  "run_config": {
+    "limit": 1000,
+  }
+}'
+```
+
+Copy
+
+```
+import requests
+
+QUERY_ID = "<your query ID here>"
+API_KEY = "<your api key here>"
+
+response = requests.post(
+    f"https://api.allium.so/api/v1/explorer/queries/{QUERY_ID}/run-async",
+    json={
+        "parameters": {},
+        "run_config": {
+            "limit": 1000,
+        }
+    },
+    headers={
+        "X-API-Key": API_KEY
+    },
+)
+
+result = response.json()
+print(result)
+```
+
+Copy
+
+```
+const QUERY_ID = "<your query ID here>"
+const API_KEY = "<your api key here>"
+
+const response = await fetch(`https://api.allium.so/api/v1/explorer/queries/${QUERY_ID}/run-async`, {
+  method: 'POST',
+  body: json.dumps({
+      "parameters": {},
+      "run_config": {
+          "limit": 1000,
+      }
+  }),
+  headers: {
+    'Content-Type': 'application/json',
+    'X-API-KEY': API_KEY,
+  },
+});
+
+const data = await response.json();
+console.log(data);
+```
+
+## Retrieve the latest query run information for a query
+
+### Get Latest Query Run Handler
+
+get
+
+/api/v1/explorer/query-runs
+
+Authorizations
+
+Query parameters
+
+query\_idstringrequired
+
+Responses
+
+200
+
+Successful Response
+
+application/json
+
+422
+
+Validation Error
+
+application/json
+
+cURL
+
+JavaScript
+
+Python
+
+HTTP
+
+Copy
+
+```
+curl -L \
+  --url '/api/v1/explorer/query-runs?query_id=text' \
+  --header 'X-API-KEY: YOUR_API_KEY'
+```
+
+Test it
+
+200
+
+422
+
+Copy
+
+```
+{
+  "run_id": "text",
+  "query_id": "text",
+  "query_config": {
+    "sql": "text",
+    "limit": 1,
+    "parameters": {
+      "ANY_ADDITIONAL_PROPERTY": "text"
+    },
+    "datastore_to_use": "snowflake"
+  },
+  "creator_id": "text",
+  "created_at": "2025-03-17T16:52:57.189Z",
+  "completed_at": "2025-03-17T16:52:57.189Z",
+  "status": "created",
+  "stats": {
+    "start_time": "2025-03-17T16:52:57.189Z",
+    "end_time": "2025-03-17T16:52:57.189Z",
+    "datastore": "snowflake",
+    "sql": "text",
+    "row_count": 1,
+    "data_size_bytes": 1
+  },
+  "error": "text",
+  "results": {
+    "storage_type": "gcs"
+  },
+  "zed_token": "text"
+}
+```
+
+Successful Response
+
+## Retrieve the status of a query run
+
+### Get Query Run Status
+
+get
+
+/api/v1/explorer/query-runs/\{run\_id}/status
+
+Authorizations
+
+Path parameters
+
+run\_idstringrequired
+
+Responses
+
+200
+
+Successful Response
+
+application/json
+
+422
+
+Validation Error
+
+application/json
+
+cURL
+
+JavaScript
+
+Python
+
+HTTP
+
+Copy
+
+```
+curl -L \
+  --url '/api/v1/explorer/query-runs/{run_id}/status' \
+  --header 'X-API-KEY: YOUR_API_KEY'
+```
+
+Test it
+
+200
+
+422
+
+Copy
+
+```
+created
+```
+
+Successful Response
+
+### Possible query run statuses
+
+| Status     | Description                                    |
+| ---------- | ---------------------------------------------- |
+| `created`  | Query has been created.                        |
+| `queued`   | Query has been queued for execution.           |
+| `running`  | Query is currently executing.                  |
+| `success`  | Query has successfully executed.               |
+| `failed`   | Query execution failed.                        |
+| `canceled` | Query was canceled, likely due to user action. |
+
+## Retrieve the results of a query run
+
+### Get Query Run Results
+
+get
+
+/api/v1/explorer/query-runs/\{run\_id}/results
+
+Authorizations
+
+Path parameters
+
+run\_idstringrequired
+
+Query parameters
+
+fall of · default: json
+
+An enumeration.
+
+### Show ResponseFormat
+
+Responses
+
+200
+
+Successful Response
+
+application/json
+
+422
+
+Validation Error
+
+application/json
+
+cURL
+
+JavaScript
+
+Python
+
+HTTP
+
+Copy
+
+```
+curl -L \
+  --url '/api/v1/explorer/query-runs/{run_id}/results' \
+  --header 'X-API-KEY: YOUR_API_KEY'
+```
+
+Test it
+
+200
+
+422
+
+Copy
+
+```
+{
+  "sql": "text",
+  "data": null,
+  "meta": {
+    "columns": [
+      {
+        "name": "text",
+        "data_type": "text"
+      }
+    ]
+  },
+  "queried_at": "2025-03-17T16:52:57.189Z"
+}
+```
+
+Successful Response
+
+The query run result will have the following fields:
+
+| Field name     | Description                                                |
+| -------------- | ---------------------------------------------------------- |
+| `sql`          | The SQL query executed in the request                      |
+| `data`         | The results of the query encoded as a list of JSON objects |
+| `meta`         | Metadata about the results.                                |
+| `meta.columns` | List of the data's column names and types.                 |
+| `queried_at`   | The timestamp at which the query was executed              |
+
+## Cancel a query run
+
+### Cancel Query Run
+
+post
+
+/api/v1/explorer/query-runs/\{run\_id}/cancel
+
+Authorizations
+
+Path parameters
+
+run\_idstringrequired
+
+Responses
+
+200
+
+Successful Response
+
+application/json
+
+422
+
+Validation Error
+
+application/json
+
+cURL
+
+JavaScript
+
+Python
+
+HTTP
+
+Copy
+
+```
+curl -L \
+  --request POST \
+  --url '/api/v1/explorer/query-runs/{run_id}/cancel' \
+  --header 'X-API-KEY: YOUR_API_KEY'
+```
+
+Test it
+
+200
+
+422
+
+```
+No body
+```
+
+Successful Response
+
+

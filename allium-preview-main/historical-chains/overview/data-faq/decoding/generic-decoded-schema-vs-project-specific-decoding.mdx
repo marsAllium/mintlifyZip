@@ -1,0 +1,40 @@
+---
+title: "Generic Decoded Schema Vs Project Specific Decoding"
+---
+
+Allium currently supports decoded logs and traces on the schema level.
+
+All decoded event logs and traces for EVM blockchains can be found in the respective `chain.decoded.logs` or `chain.decoded.traces` table.
+
+We currently do not support project-level decoding, that presents 1 event / trace call for each contract and project.
+
+However, all the relevant project-specific contracts can still be found in the decoded vertical tables.
+
+Copy
+
+```
+select * from ethereum.decoded.logs
+where address = '0xc36442b4a4522e871399cd717abdd847ab11fe88' -- Uniswap V3: Positions NFT
+limit 10
+```
+
+![](https://docs.allium.so/~gitbook/image?url=https%3A%2F%2F137711553-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252FUrfZbzSRStJdjOp5DS3Z%252Fuploads%252FlA9HQpaBdkZf0GaK67XV%252Fimage.png%3Falt%3Dmedia%26token%3D7c531275-d99f-43cd-b0ca-b5ab55670056\&width=768\&dpr=4\&quality=100\&sign=ebf70e79\&sv=2)
+
+All events emitted by the contract can be found in one single table
+
+To identify the logs/traces associated with a project of interest, we recommend maintaining a metadata table for your project that filters out for the desired contracts + event/trace calls.
+
+Example:
+
+Copy
+
+```
+select * from ethereum.decoded.logs
+inner join metadata_table -- Metadata table with the contracts of interest
+    on metadata_table.contract_address = logs.address
+    and metadata_table.project = 'Uniswap'
+    and metadata_table.type = 'logs'
+    and metadata_table.event_name = 'DecreaseLiquidity'
+```
+
+

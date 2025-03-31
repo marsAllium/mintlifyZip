@@ -1,0 +1,91 @@
+---
+title: "Allium AI Assistant"
+---
+
+### What is the Allium AI Assistant?
+
+The Allium AI Assistant is designed to assist users in writing SQL queries by converting plain English questions into SQL statements. This allows users to get the answers they need without having to manually write complex SQL queries.
+
+The goal is that you can spend more time conducting analysis and less time SQL writing.
+
+### How to Operate the AI Assistant
+
+The AI Assistant can be found in the sidebar menu of the Allium Explorer.
+
+![](https://docs.allium.so/~gitbook/image?url=https%3A%2F%2F137711553-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252FUrfZbzSRStJdjOp5DS3Z%252Fuploads%252FSCEbrdVd1X2ursTJ4lwv%252FScreenshot%25202024-07-16%2520at%25202.51.49%25E2%2580%25AFPM.png%3Falt%3Dmedia%26token%3D505f602d-9361-4265-bd8e-43d56a7fc043\&width=768\&dpr=4\&quality=100\&sign=ba452b01\&sv=2)
+
+After the "Assistant" tab is clicked on & opened, you will be redirected to the page below, where you can ask questions & record your question history.
+
+![](https://docs.allium.so/~gitbook/image?url=https%3A%2F%2F137711553-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252FUrfZbzSRStJdjOp5DS3Z%252Fuploads%252FAPJz1MShoWdqN6Pn5Atl%252FScreenshot%25202024-07-16%2520at%25203.16.47%25E2%2580%25AFPM.png%3Falt%3Dmedia%26token%3Daf84c5e0-8256-4f32-968f-c44925c361cf\&width=768\&dpr=4\&quality=100\&sign=a6c54d14\&sv=2)
+
+Once you ask a question, a SQL as well as a full explanation will be provided. Simply click "Run Query" as highlighted below and your query will be provided:
+
+![](https://docs.allium.so/~gitbook/image?url=https%3A%2F%2F137711553-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252FUrfZbzSRStJdjOp5DS3Z%252Fuploads%252F64q3PYE2Oo7RJOJ7GayJ%252FScreenshot%25202024-07-16%2520at%25203.29.31%25E2%2580%25AFPM.png%3Falt%3Dmedia%26token%3De7d990a0-7f86-4b6d-9a63-45d970bc4d84\&width=768\&dpr=4\&quality=100\&sign=a7bf2641\&sv=2)
+
+The Allium Assistant can also be found within the Allium Explorer platform itself, right next the area in which one writes queries for quick access to troubleshooting.
+
+![](https://docs.allium.so/~gitbook/image?url=https%3A%2F%2F137711553-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252FUrfZbzSRStJdjOp5DS3Z%252Fuploads%252F7FL2dRNMIQPM76ChI5rg%252FScreenshot%25202024-07-16%2520at%25202.51.56%25E2%2580%25AFPM.png%3Falt%3Dmedia%26token%3Daf303a7a-f582-43e0-9b67-d43d1d5f7239\&width=768\&dpr=4\&quality=100\&sign=a2494734\&sv=2)
+
+Once you click on the "Start" button within Allium Explorer, a new chat box will be prompted, in which you can ask a question in plain English and receive a SQL query that can be easily copied & pasted, as well as an answer with context.
+
+![](https://docs.allium.so/~gitbook/image?url=https%3A%2F%2F137711553-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252FUrfZbzSRStJdjOp5DS3Z%252Fuploads%252FC6HB2PF7I3nf20Dy9hKq%252Fdownload%2520%281%29.gif%3Falt%3Dmedia%26token%3D4081b570-491e-45d0-8e26-97d794198419\&width=768\&dpr=4\&quality=100\&sign=aafa36bc\&sv=2)
+
+### Example of What Users Can Prompt the AI Assistant:
+
+Request posed to the AI Assistant:
+
+> Derive DEX Notionals by Blockchain.
+
+SQL Query Prompted:
+
+Copy
+
+```
+SELECT
+    DATE(block_timestamp) AS date,
+    chain,
+    SUM(usd_amount) AS usd_volume,
+    COUNT(distinct transaction_from_address) AS traders
+FROM
+    crosschain.dex.trades
+WHERE
+    block_timestamp >= CURRENT_TIMESTAMP - INTERVAL '90 days'
+GROUP BY
+    date, chain
+ORDER BY
+    date DESC;
+```
+
+Explanation Prompted:
+
+> This query aggregates the total notional traded on decentralized exchanges (DEX) for different blockchains by summing up `usd_amount` for each `chain` on a daily basis.
+>
+> **DEX Data Available**
+>
+> Allium provides detailed data on DEX trades, including:
+>
+> * **Trades**: Token swaps on major DEXes
+>
+> * **Aggregator Trades**: Trades executed by aggregators or contracts that route swaps across multiple liquidity pools
+>
+> * **Liquidity Pool Events**: Liquidity pool events such as mints, burns, sync, and collect
+>
+> * **Liquidity Pools**: Pool creation events and their parameters
+>
+> For more detailed information on DEX tables and their descriptions, you can visit the [DEX documentation](https://docs.allium.so/historical-data/supported-blockchains/evm/ethereum/dex). Additionally, Allium supports data for multiple blockchain protocols, including Uniswap, Sushiswap, Balancer, Curve, and others, across different chains like Ethereum, Binance Smart Chain, Avalanche, and many more.
+
+### Tips to Remember
+
+When asking the AI Assistant questions, the more precise your question is, the easier it will be for our models to understand exactly what data you hope to retrieve & provide you with the correct query the first time around.
+
+If the query does not retrieve the data you seek, troubleshoot with our assistant until it understands your request more comprehensively or reach out to us!
+
+### Assistance Beyond AI
+
+If you need more specific queries or deeper insights & need real-life Alliumite support beyond our AI Assistant, we are always here to assist at support\@allium.so. We are also more than happy to host a Slack or Telegram Channel to facilitate easy communication.
+
+### Making This Possible
+
+On top of our data models, we partner with Cortex Click for our model generation.
+
+

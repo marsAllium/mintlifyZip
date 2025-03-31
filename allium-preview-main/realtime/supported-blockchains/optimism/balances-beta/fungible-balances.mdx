@@ -1,0 +1,40 @@
+---
+title: "Fungible Balances"
+---
+
+The fungible balances table contains historical native token (e.g. ETH, MATIC, AVAX) and ERC20 tokens the balance of all addresses, at block height that has a balance change for the particularly address.
+
+### Sample Query
+
+Query wallet Balance of a wallet by token address.
+
+PSQLAPI (cURL)
+
+Copy
+
+```
+select * from optimism.assets_fungible_balances 
+where address = '0xd97d0911007bef00748579c5b8879a135ca31950'
+and token_address = '0x0000000000000000000000000000000000000000' -- ETH
+```
+
+Copy
+
+```
+curl 'https://api.allium.so/api/v1/developer/optimism/address/0xd97d0911007bef00748579c5b8879a135ca31950/balances/fungible?page=1&size=10&token_address=0x0000000000000000000000000000000000000000' \
+  -X GET \
+  -H 'X-API-KEY: <API KEY>'
+```
+
+## Table Columns
+
+| Column Name      | Type         | Description                                                                                                | Example                                                            |
+| ---------------- | ------------ | ---------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------ |
+| address          | varchar      | Address of the account.                                                                                    | 0xd97d0911007bef00748579c5b8879a135ca31950                         |
+| token\_address   | varchar      | Token address. Native ETH is represented as `0x0000000000000000000000000000000000000000`                   | 0x0000000000000000000000000000000000000000                         |
+| raw\_balance     | numeric(512) | Unormalized token balance. For ETH, balance of eth in [wei](https://www.investopedia.com/terms/w/wei.asp). | 5800000000000000                                                   |
+| block\_timestamp | timestamp    | The timestamp of the block that that resulted in the `balance`.                                            | 2023-12-11T07:50:31                                                |
+| block\_number    | bigint       | The number of the block that resulted in the `balance`.                                                    | 113341127                                                          |
+| block\_hash      | varchar      | The hash of the block that resulted in the `balance`.                                                      | 0x85f382f4213d2795f63952465d94563cb1bc353c405ce7a14bd4d613ae6c1c81 |
+
+

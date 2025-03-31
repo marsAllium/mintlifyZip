@@ -1,0 +1,41 @@
+---
+title: "Bitcoin"
+---
+
+Bitcoin Tables
+
+Our Bitcoin schema includes both raw UTXO data and ordinal inscriptions.
+
+| Description                                                                                  | Tables                                                                                     |
+| -------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
+| Raw blockchain data.                                                                         | blocks, transactions, inputs, outputs                                                      |
+| Mempool data.                                                                                | mempool\_transactions, mempool\_input, mempool\_outputs                                    |
+| BTC inscription trades and mints. Includes metadata on ordinals inscription and collections. | ordinals\_inscription\_mints, ordinals\_inscription\_transfers, ordinals\_token\_transfers |
+
+### Bitcoin Raw Data
+
+![](https://docs.allium.so/~gitbook/image?url=https%3A%2F%2F137711553-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252FUrfZbzSRStJdjOp5DS3Z%252Fuploads%252FBxHzad9fsvYodZxQMOT1%252Fimage.png%3Falt%3Dmedia%26token%3Ddee7cce5-6900-4128-9f4b-959c6e35dc54\&width=768\&dpr=4\&quality=100\&sign=ac2a7d89\&sv=2)
+
+[Sample bitcoin transaction](https://mempool.space/tx/82794a9ee221453c8da04ea1f876a379cc70512edcd8b3dbc2349c84c4265ce0). All data on mempool.space can be recreated with Allium data.
+
+Bitcoin transactions are composed of input and output utxos going in and out of a certain transaction.
+
+### Bitcoin UTXO
+
+Bitcoin UTXO, short for Unspent Transaction Output, represents a specific amount of bitcoin that has been sent to a recipient and not yet spent.
+
+When a new transaction occurs, it references and consumes specific UTXOs as inputs and creates new UTXOs as outputs.
+
+We have schemas for Bitcoin utxo balances per address in double entry book form, as balances per change block height, and the latest balance reflected by the block height with most recent
+
+### Ordinals
+
+The *satoshi* is the smallest denomination of the cryptocurrency bitcoin. In each Bitcoin, there are 100 million satoshis.
+
+Ordinals are a numbering scheme for satoshis that allows tracking and transferring individual sats.
+
+Bitcoin holders can “inscribe” their satoshis permanently with unique digital content of up to 4 megabytes, following the Taproot Bitcoin protocol update in 2021.
+
+As a result, can inscribe assets such as NFTs to each satoshi with the ordinal numbers as an identifier, introducing NFTs on the Bitcoin network.
+
+

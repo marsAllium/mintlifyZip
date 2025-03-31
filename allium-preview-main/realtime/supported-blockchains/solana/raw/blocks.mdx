@@ -1,0 +1,25 @@
+---
+title: "Blocks"
+---
+
+Blocks are the building blocks of blockchains and rollups. A block contains transactions which contains instructions which will alter the state of the solana blockchain incrementally. Transactions within a block can only be executed one after the other, not in parallel. Instructions within a transaction can only be executed one after the other, not in parallel.
+
+Learn more in the official Solana documentation [here](https://docs.solana.com/developing/programming-model/accounts).
+
+### Table Columns
+
+| Column Name                   | Description                                                                                                                                                                                                                                                                                            | Example                                      |
+| ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------- |
+| slot                          | The time of the slot and also block. Within the time window of a slot a block may or may not be proposed and voted upon. Only non-empty slots are indexed.                                                                                                                                             | 276304227                                    |
+| height                        | The number of [blocks](https://docs.solana.com/terminology#block) beneath the current block. The first block after the [genesis block](https://docs.solana.com/terminology#genesis-block) has height one. height \< slot as some each slot as at most 1 block. blocks \< 81032053 have no block height | 255661589                                    |
+| timestamp                     | The time when the slot was included on the blockchain. blocks \< 39824214 have no block timestamp                                                                                                                                                                                                      | 2024-07-08 02:16:54.000                      |
+| hash                          | Unique identifier for that slot. (base58)                                                                                                                                                                                                                                                              | 36KR3aiVEZYSJDb8wgWBWpXbYykuz3BJagFRMhFijKxA |
+| parent\_slot                  | Slot number of the non-empty slot preceding this slot                                                                                                                                                                                                                                                  | 276304226                                    |
+| previous\_block\_hash         | Unique identifier of the non-empty slot preceding this slot                                                                                                                                                                                                                                            | 2ymHtgWXKxVf5BVVdt34onGrkUm7oDCHTMBBzkJt1rsV |
+| transaction\_count            | Number of transactions in the block                                                                                                                                                                                                                                                                    | 875                                          |
+| nonvoting\_transaction\_count | Number of nonvoting transactions in the block                                                                                                                                                                                                                                                          | 441                                          |
+| reward\_count                 | Number of rewards in the block                                                                                                                                                                                                                                                                         | 1                                            |
+
+### 
+
+

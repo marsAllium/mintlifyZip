@@ -1,0 +1,18 @@
+---
+title: "Inscriptions And Rare Sats"
+---
+
+Inscriptions data includes ordinals inscription mints, ordinals inscription transfers, ordinals token transfers, rare sats, ordinals metadata, and collections metadata.
+
+All tables except for ordinals and collections metadata are refreshed on a per block basis with \~120s freshness from block timestsamp to insertion to database. Ordinals and collections metadata tables are updated on a time based cadence.
+
+| Table Name                               | Description                                                                                                                                    |
+| ---------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| `bitcoin.ordinals_inscription_mints`     | All relevant data for the mint of any inscription on a UTXO, data is per inscription (including reinscription and multi envelope inscriptions) |
+| `bitcoin.ordinals_inscription_transfers` | All relevant data for the transfer of any UTXO containing an inscription                                                                       |
+| `bitcoin.ordinals_token_transfers`       | All relevant data for BRC-20 token transfers including effected token balance following valid inscription transfer for a given token           |
+| `bitcoin.utxos_with_rare_sats`           | Data for UTXO's that contain rare sats including rare satributes and sat amounts                                                               |
+| `bitcoin.metadata_ordinals_collections`  | Metadata for ordinals on collection level                                                                                                      |
+| `bitcoin.metadata_ordinals_inscription`  | Metadata for ordinals on inscription level                                                                                                     |
+
+

@@ -1,0 +1,42 @@
+---
+title: "Blocks"
+---
+
+Blocks are the building blocks of blockchains. A block contains transactions which will alter the state of the blockchain incrementally. Transaction within a block can only be executed one after the other and utxo movement is sequential based on the order of inputs and outputs within transactions and blocks. Learn more in the official Bitcoin documentation [here](https://developer.bitcoin.org/reference/block_chain.html).
+
+### Sample Query:
+
+Query to fetch the latest blocks
+
+Copy
+
+```
+select *
+  from bitcoin.blocks
+order by timestamp desc 
+limit 100;
+```
+
+### Table Columns
+
+| Column Name         | Description                                                                                                                                                                 | Example                                                          |
+| ------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------- |
+| timestamp           | Timestamp of the block.                                                                                                                                                     | 2023-05-18 02:56:03                                              |
+| number              | Block number or block height.                                                                                                                                               | 790,250                                                          |
+| hash                | Block hash.                                                                                                                                                                 | 0000000000000000000222dfc9297b2bb90481bfa28fd04ac2e8a4dfdaab5a15 |
+| confirmations       | The number of confirmations, or -1 if the block is not on the main chain. A confirmation indicates that a Bitcoin transaction has been added to a block on the blockchain.  | 2                                                                |
+| version             | The block version.                                                                                                                                                          | 538,968,064                                                      |
+| merkle\_root        | The root node of a Merkle tree, where leaves are transaction hashes.                                                                                                        | 93878cb1f1f39c03b22be799f520ed0203deb6b95db372962a60fb02e58f7ff5 |
+| median\_time        | The median block time expressed in UNIX epoch time.                                                                                                                         | 1,684,374,147                                                    |
+| nonce               | The number of transactions made by the sender prior to this one.                                                                                                            | e0e8d097                                                         |
+| bits                | The difficulty threshold specified in block header.                                                                                                                         | 1705dd01                                                         |
+| difficulty          | The estimated amount of work done to find this block relative to the estimated amount of work done to find block 0.                                                         | 48,005,534,313,578.80                                            |
+| chainwork           | Expected number of hashes required to produce the current chain.                                                                                                            | 000000000000000000000000000000000000000048d25064eab6183fd989af8a |
+| transaction\_count  | Total number of transactions in the block.                                                                                                                                  | 2,958                                                            |
+| previous\_blockhash | The block hash of the previous block.                                                                                                                                       | 000000000000000000026f3c94574a40692053865a537c480609f6a5c451009a |
+| next\_blockhash     | The block hash of the next block, if applicable.                                                                                                                            | 0000000000000000000085aae10b84ae22c3f41399a0aa6018351e803739455b |
+| stripped\_size      | The block size excluding witness data.                                                                                                                                      | 804,075                                                          |
+| size                | Size of the block mined.                                                                                                                                                    | 1,585,359                                                        |
+| weight              | [The block weight as defined in](https://github.com/bitcoin/bips/blob/master/bip-0141.mediawiki)[BIP 141](https://github.com/bitcoin/bips/blob/master/bip-0141.mediawiki). | 3,997,584                                                        |
+
+

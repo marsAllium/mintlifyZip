@@ -1,0 +1,37 @@
+---
+title: "UTXOs With Rare Sats"
+---
+
+UTXOs with rare sats are unspent transaction outputs that contain satoshis considered unique or special due to their position in Bitcoin's minting history, such as the first satoshi of a block or other notable events. These rare sats can be tracked and valued for their scarcity, adding a collectible aspect to UTXOs. When transferred, the UTXO retains the rare sat's provenance, making it distinct from regular satoshis and appealing to collectors within the Ordinals ecosystem.
+
+You can learn more about rare sats here: [Magic Eden's Guide to Rare Sats](https://community.magiceden.io/learn/rare-sats-guide)
+
+### Sample Query
+
+Copy
+
+```
+select * from bitcoin.utxos_with_rare_sats 
+where utxo_id = '0039271bc1da17ed0ece697c71da173d55cfbacd7c1769db29e0dbbea4f95dff'
+```
+
+### Table Columns
+
+| Column              | Description           |
+| ------------------- | --------------------- |
+| block\_hash         | block hash            |
+| block\_number       | block number          |
+| block\_timestamp    | block timestamp       |
+| transaction\_hash   | transaction hash      |
+| transaction\_index  | transaction index     |
+| utxo\_id            | utxo id               |
+| address0            | current owner of utxo |
+| value               | utxo amount           |
+| satributes          | satributes of utxo    |
+| sat\_ranges         | sat ranges            |
+| sat\_ranges\_offset | sat ranges\_offset    |
+| all\_satributes     | all satributes        |
+| satribute\_counts   | satribute counts      |
+| rare\_sats\_count   | rare sats\_count      |
+
+

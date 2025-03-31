@@ -1,0 +1,89 @@
+---
+title: "NFT Trades"
+---
+
+The `nft_trades` table aggregates ERC721 and ERC1155 token sales from popular NFT marketplaces and protocols on Ethereum such as Opensea. All NFT trades table follows the schema presented below.
+
+Our current NFT trades model support&#x73;**&#x20;single-currency trades** (trades involving either one ERC20 token or ETH alone), which constitute most of the current NFT trades.
+
+### Marketplace and Protocol Coverage
+
+| Marketplace | Protocol(s)                  | Status                                                                                                                                                                                                                                                                                                                                                      |
+| ----------- | ---------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| opensea     | seaport                      | ✅                                                                                                                                                                                                                                                                                                                                                           |
+| opensea     | wyvern                       | ![](https://docs.allium.so/~gitbook/image?url=https%3A%2F%2F137711553-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252FUrfZbzSRStJdjOp5DS3Z%252Fuploads%252FUGTcl9Jbnam4QqVe5l4n%252Floading-dots.gif%3Falt%3Dmedia%26token%3D16924af0-98be-4a2e-8583-610c41778723\&width=40\&dpr=4\&quality=100\&sign=3326a01c\&sv=2) |
+| blur.io     | blurexchange, blurexchangev2 | ✅                                                                                                                                                                                                                                                                                                                                                           |
+
+### Sample Query
+
+Query DEX trades by block number.
+
+PSQLAPI (cURL)
+
+Copy
+
+```
+select * from ethereum.nft_trades 
+where block_number = 18443321 
+```
+
+Copy
+
+```
+curl 'https://api.allium.so/api/v1/developer/ethereum/dex/trades/?block_number=18443321' \
+  -X GET \
+  -H 'X-API-KEY: <API KEY>'
+```
+
+Query DEX trades by transaction hash.
+
+PSQLAPI (cURL)
+
+Copy
+
+```
+select * from ethereum.nft_trades 
+where transaction_hash = '0x0231bcbbfae2ed9a5a6c2dd596f8e7a540eb1cf498b0ce83c0a8c77ce7b07a93' 
+```
+
+Copy
+
+```
+curl 'https://api.allium.so/api/v1/developer/ethereum/nft/trades/?transaction_hash=0x0231bcbbfae2ed9a5a6c2dd596f8e7a540eb1cf498b0ce83c0a8c77ce7b07a93' \
+  -X GET \
+  -H 'X-API-KEY: <API KEY>'
+```
+
+### Table Columns
+
+| Column Name          | Type         | Description                                                                                                                | Example                                                            |
+| -------------------- | ------------ | -------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------ |
+| marketplace          | varchar      | Marketplace of the nft trade. The list of marketplaces supported can be found at the end of this table.                    | opensea                                                            |
+| protocol             | varchar      | The protocol of the marketplace determined by the smart contract used.                                                     | seaport                                                            |
+| order\_match\_type   | varchar      | Type of sales. Registered as `buy` for direct purchase and `accept_bid` for bids accepted.                                 | buy                                                                |
+| trade\_type          | varchar      | Type of trade. `single_trade` for single token sales or `bundle_trade` when more than 1 token is sold in a transaction.    | single\_trade                                                      |
+| aggregator\_name     | varchar      | Name of the aggregator use for the trade. Will be empty is the trade did not involve the use of aggregators.               |                                                                    |
+| aggregator\_address  | varchar      | Contract address of the aggregator used for the trade.                                                                     |                                                                    |
+| buyer\_address       | varchar(42)  | Address of the buyer.                                                                                                      | 0xf2cf7378e44be078732c215fad97af709379ca1d                         |
+| seller\_address      | varchar(42)  | Address of the seller.                                                                                                     | 0x8349e15d8bf536f164a82a95daa9bd8ccdb917c2                         |
+| token\_standard      | varchar      | Type of token traded in the transaction. Either an ERC721 or ERC1155 token.                                                | erc721                                                             |
+| token\_address       | varchar(42)  | Token contract of the NFT in the trade.                                                                                    | 0xed5af388653567af2f388e6224dc7c4b3241c544                         |
+| token\_name\*        | varchar      | Name of the token traded.                                                                                                  | Azuki                                                              |
+| token\_symbol\*      | varchar      | Symbol of the token traded.                                                                                                | AZUKI                                                              |
+| token\_id            | varchar      | Token id of the NFT traded.                                                                                                | 1220                                                               |
+| item\_quantity       | bigint       | Quantity of the item traded. For ERC721 tokens, the value is null. While for ERC1155 tokens, the value can be more than 1. | 1                                                                  |
+| currency\_address    | varchar(42)  | Token address of the currency used for this trade. Native ETH is represented as 0x0000000000000000000000000000000000000000 | 0x0000000000000000000000000000000000000000                         |
+| currency\_name\*     | varchar      | Name of the currency used for the trade.                                                                                   | Ether                                                              |
+| currency\_symbol\*   | varchar      | Symbol of the currency used for the trade.                                                                                 | ETH                                                                |
+| currency\_decimals\* | bigint       | Decimals of the currency used for the trade.                                                                               | 18                                                                 |
+| raw\_price           | numeric(512) | Raw price of the NFT trade. (Unnormalised)                                                                                 | 1000000000000000                                                   |
+| price\*              | varchar      | Price of the NFT trade, as a string.                                                                                       | 0.001                                                              |
+| transaction\_hash    | varchar(66)  | Transaction hash for this trade.                                                                                           | 0x3ec77b76736d14f2f964eaf753df3a01cdae516034f26ffcf6c467f33fd6c26e |
+| log\_index           | bigint       | Log index for this trade                                                                                                   | 131                                                                |
+| block\_timestamp     | timestamp    | The timestamp of the block that the corresponding transaction of this trade.                                               | 2022-06-13 11:25:53                                                |
+| block\_number        | number       | The block number that the corresponding transaction of this trade belongs to.                                              | 14,955,742                                                         |
+| block\_hash          | varchar(66)  | The block hash that the corresponding transaction of this trade belongs to.                                                | 0x014b75aa476fe71538ae89d3b529c6e7c17d14fd781b205d28add93b08931be8 |
+
+\*field is only available via the API, and are not in the underlying table.
+
+

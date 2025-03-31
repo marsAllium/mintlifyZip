@@ -1,0 +1,87 @@
+---
+title: "DEX Trades"
+---
+
+The `dex_trades` table contains swaps made on decentralized exchanges for the chain, consolidated into a single table. All DEX trades table follows the schema presented below.
+
+### Project Coverage
+
+Currently, we support over 20 DEX projects on Ethereum.
+
+| Protocol    | Projects                                                                                                                                                                                                                                                                                                                                                                                |
+| ----------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| uniswap\_v3 | uniswap, kyberswap, pancakeswap                                                                                                                                                                                                                                                                                                                                                         |
+| uniswap\_v2 | original: uniswapforks: sushiswap, bitberryswap, cityswap, convergence, defiswap, dooar, equalizerfinance, fraxswap, gemswap, integralsize, linkswap, luaswap, mintyswap, nomiswap, orionprotocol, pancakeswap, plasmafinance, radioshackswap, safeswap, saitaswap, sakeswap, sashimiswap, shibaswap, sumswap, swapr, swipeswap, unicly, verse, vulcandex, wallstreetbetsdex, whiteswap |
+
+### Sample Query
+
+Query DEX trades by block number.
+
+PSQLAPI (cURL)
+
+Copy
+
+```
+select * from ethereum.dex_trades 
+where block_number = 18443152 
+```
+
+Copy
+
+```
+curl 'https://api.allium.so/api/v1/developer/ethereum/dex/trades/?block_number=18443152' \
+  -X GET \
+  -H 'X-API-KEY: <API KEY>'
+```
+
+Query DEX trades by transaction hash.
+
+PSQLAPI (cURL)
+
+Copy
+
+```
+select * from ethereum.dex_trades 
+where transaction_hash = '0x973652a33e1662c4f559b447eb267024e758ade68845a7b582ca8c8d3c2981f3' 
+```
+
+Copy
+
+```
+curl 'https://api.allium.so/api/v1/developer/ethereum/dex/trades/?transaction_hash=0x973652a33e1662c4f559b447eb267024e758ade68845a7b582ca8c8d3c2981f3' \
+  -X GET \
+  -H 'X-API-KEY: <API KEY>'
+```
+
+### Table Columns
+
+| Column Name                | Type         | Description                                                                                                                                                                                           | Example                                                            |
+| -------------------------- | ------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------ |
+| project                    | varchar      | The project (decentralized exchange) of the liquidity pool that the swap occurred from.                                                                                                               | uniswap                                                            |
+| protocol                   | varchar      | Version of the protocol.                                                                                                                                                                              | uniswap\_v2                                                        |
+| liquidity\_pool\_address   | varchar(42)  | Contract address of the liquidity pool holding the asset.                                                                                                                                             | 0xb4e16d0168e52d35cacd2c6185b44281ec28c9dc                         |
+| sender\_address            | varchar(42)  | The address of the sender emitted on the swap event logs. This can be a router or pool address, which is different from the transaction initiator `transaction_from_address` that initiated the swap. | 0x7a250d5630b4cf539739df2c5dacb4c659f2488d                         |
+| to\_address                | varchar(42)  | Address of the recipient emitted on the swap event logs.For example, we use the to\_address from the uniswap v2 swap event log and the recipient\_address from the uniswap v3 swap event log.         | 0xcbb2534c6898655d50fdac79d6e4b23b18a25b97                         |
+| token\_bought\_address\*   | varchar(42)  | Token address of the token bought, i.e. the asset acquired from the trade.                                                                                                                            | 0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48                         |
+| token\_bought\_name\*      | varchar      | Name of the token bought.                                                                                                                                                                             | USD Coin                                                           |
+| token\_bought\_symbol\*    | varchar      | Symbol of the token bought.                                                                                                                                                                           | USDC                                                               |
+| token\_bought\_decimals\*  | bigint       | Decimals of the token bought.                                                                                                                                                                         | 1                                                                  |
+| token\_bought\_amount\_raw | numeric(512) | Raw amount of tokens bought (unnormalized).                                                                                                                                                           | 3,000,000,000                                                      |
+| token\_bought\_amount\*    | float        | Amount of tokens bought.                                                                                                                                                                              | 3000000000                                                         |
+| token\_sold\_address\*     | varchar(42)  | Token address of the token sold.                                                                                                                                                                      | 0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2                         |
+| token\_sold\_name\*        | varchar      | Name of the token sold.                                                                                                                                                                               | Wrapped Ether                                                      |
+| token\_sold\_symbol\*      | varchar      | Symbol of the token sold.                                                                                                                                                                             | WETH                                                               |
+| token\_sold\_decimals\*    | bigint       | Decimals of the token sold.                                                                                                                                                                           | 18                                                                 |
+| token\_sold\_amount\_raw   | numeric(512) | Raw amount of tokens sold (unnormalized).                                                                                                                                                             | 2,288,149,153,584,170,000                                          |
+| token\_sold\_amount\*      | float        | Amount of tokens sold.                                                                                                                                                                                | 2.28814915358417                                                   |
+| transaction\_from\_address | varchar(42)  | Transaction sender address. I.e. the address of the transaction initiator. (`from_address` in the raw\.transactions field for the `transaction_hash` of this swap).                                   | 0xcbb2534c6898655d50fdac79d6e4b23b18a25b97                         |
+| transaction\_to\_address   | varchar(42)  | Transaction receiver. (`to_address` in the raw\.transactions field for the `transaction_hash` of this swap).                                                                                          | 0x7a250d5630b4cf539739df2c5dacb4c659f2488d                         |
+| transaction\_hash          | varchar(66)  | Transaction hash that this swap belongs to.                                                                                                                                                           | 0x5e2efbb5a7cd468a2bf89b732e42c9c48bd311e0bec50a5de0beead059d1d220 |
+| log\_index                 | bigint       | The position of the swap event log in the transaction.                                                                                                                                                | 191                                                                |
+| block\_timestamp           | timestamp    | Block timestamp of the swap event.                                                                                                                                                                    | 2021-01-25 22:28:07                                                |
+| block\_number              | bigint       | Block number of the swap event.                                                                                                                                                                       | 11,727,610                                                         |
+| block\_hash                | varchar(66)  | Block hash of the swap event.                                                                                                                                                                         | 0xff32ce4497bfad832878d069ce956f4eac5a6518c89fe8c4268af5f27c2cc1a5 |
+
+\*field is only available via the API, and are not in the underlying table.
+
+

@@ -1,0 +1,147 @@
+{
+  "$schema": "https://mintlify.com/docs.json",
+  "theme": "maple",
+  "name": "Allium Docs",
+  "colors": {
+    "primary": "#be59c0",
+    "light": "#be59c0",
+    "dark": "#be59c0"
+  },
+  "appearance": {
+    "default": "light"
+  },
+  "fonts": {
+    "heading": {
+      "family": "Manrope"
+    },
+    "body": {
+      "family": "Manrope",
+      "weight": 500
+    }
+  },
+  "favicon": "/favicon.jpg",
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Guides",
+        "groups": [
+          {
+            "group": "Data Products – Real-Time",
+            "pages": [
+              {
+                "group": "Allium Developer",
+                "pages": [
+                  "data-products-real-time/allium-developer",
+                  "data-products-real-time/allium-developer/wallet-apis",
+                  "data-products-real-time/allium-developer/nft-apis",
+                  "data-products-real-time/allium-developer/token-prices-apis"
+                ]
+              },
+              {
+                "group": "Allium Datastreams",
+                "pages": [
+                  "data-products-real-time/allium-datastreams",
+                  {
+                    "group": "Kafka & Pub/Sub",
+                    "pages": [
+                      "data-products-real-time/allium-datastreams/kafka-pubsub",
+                      "data-products-real-time/allium-datastreams/kafka-pubsub/getting-started-with-google-pub-sub"
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "group": "Real-Time Data (Chains)",
+            "pages": [
+              "realtime/overview",
+              "realtime/overview/data-tips",
+              "realtime/supported-blockchains",
+              "realtime/kafka-blockchains-70",
+              "realtime/data-delivery-options",
+              {
+                "group": "Use Cases",
+                "pages": [
+                  "realtime/common-queries",
+                  "realtime/common-queries/user-based-common-bitcoin-queries"
+                ]
+              }
+            ]
+          },
+          {
+            "group": "Historical Data (Chains)",
+            "pages": [
+              {
+                "group": "Overview",
+                "pages": [
+                  "historical-chains/overview",
+                  "historical-chains/overview/data-quality-verification",
+                  "historical-chains/overview/data-caveats"
+                ]
+              },
+              "historical-chains/supported-blockchains",
+              "historical-chains/data-delivery-interfaces"
+            ]
+          },
+          {
+            "group": "Historical Data (Verticals)",
+            "pages": [
+              "historical-verticals/balances",
+              "historical-verticals/identity",
+              "historical-verticals/decoded"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Explorer API Reference",
+        "openapi": "explorer-api.yaml"
+      },
+      {
+        "tab": "Changelog",
+        "groups": [
+          {
+            "group": " ",
+            "pages": [
+              "changelog"
+            ]
+          }
+        ]
+      }
+    ],
+    "global": {
+      "anchors": [
+        {
+          "anchor": "Blog",
+          "href": "https://www.allium.so/blog",
+          "icon": "newspaper"
+        }
+      ]
+    }
+  },
+  "logo": {
+    "light": "/logo/black.jpg",
+    "dark": "/logo/white.avif"
+  },
+  "navbar": {
+    "links": [
+      {
+        "label": "Login",
+        "href": "https://app.allium.so/"
+      }
+    ],
+    "primary": {
+      "type": "button",
+      "label": "Get Started",
+      "href": "https://www.allium.so/contact"
+    }
+  },
+  "footer": {
+    "socials": {
+      "x": "https://x.com/alliumlabs",
+      "linkedin": "https://www.linkedin.com/company/alliumlabs/",
+      "website": "https://www.allium.so/"
+    }
+  }
+}

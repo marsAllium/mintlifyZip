@@ -1,0 +1,25 @@
+---
+title: "Inner Instructions"
+---
+
+An instruction can invoke other programs. Each external invocation is represented as an inner instruction.
+
+### Table Columns
+
+| Column Name               | Description                                                                                       | Example                                                                                                                                      |
+| ------------------------- | ------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| block\_slot               | The `slot` of the block containing the parent tx.                                                 | 159292973                                                                                                                                    |
+| block\_height             | The `height` of the block containing the parent tx.                                               | 123292963                                                                                                                                    |
+| block\_timestamp          | The `timestamp` of the block containing the parent tx.                                            |                                                                                                                                              |
+| block\_hash               | The `hash` of the block containing the parent tx.                                                 | 5X6zcnNw6HSAn4X8GaMnzBp8JnWPcNHoAThFwFN1oeph                                                                                                 |
+| txn\_id                   | Unique base58 identifier of the parent tx.                                                        | 5Bc8KuxsmRCiLkBJhL7wYuTsawUiux2enj4xYr7FsPG7eUxVoCPKwqj9LcCAvTztA2drUJghUBTqo8C62qpRMM4H                                                     |
+| txn\_index                | The index of the parent tx within the block. Used for strict ordering of transactions.            | 5                                                                                                                                            |
+| instruction\_index        | The index of the parent instruction within the arr of instructions of the parent tx.              | 2                                                                                                                                            |
+| inner\_instruction\_index | The index of the inner instruction within the parent instruction                                  | 1                                                                                                                                            |
+| program\_id               | base58 address of the program being invoked by this inner instruction (note: not the instruction) | M2mx93ekt1fmXSVkTrUL9xVFHkmME8HTUi5Cyc5aF7K                                                                                                  |
+| parsed                    | JSON with info about the inner instruction                                                        | [parsed](https://docs.solana.com/developing/clients/jsonrpc-api#parsed-responses) json of the instruction, if auto-decoded by the rpc nodes. |
+| program\_name             | Accounts needed for the tx                                                                        | \[key1, key2, key3, key4, ...]                                                                                                               |
+| accounts                  | A recent block hash in the past, used as a nonce                                                  | 47S8ZnTiR1my1HqEfdWe9f9XqThW6svjqUwXF5N2ZBBk                                                                                                 |
+| data                      | data bytes of the inner instruction                                                               | 1Bjo12e9T9Lyb2dio2hHguvdQo1BXLR4pKsvQ9D                                                                                                      |
+
+

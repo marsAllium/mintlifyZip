@@ -1,0 +1,50 @@
+---
+title: "Data Delivery Interfaces"
+description: "Allium Developer provides access to blockchain data through Raw and Enriched Endpoints via SQL API, and also through real-time Data Streams"
+---
+
+## (1) Raw Data and Enriched Endpoints
+
+Our SQL interface provides access to both raw and enriched blockchain data through several fixed data types:
+
+| Raw Data Type       | Description                                                                                                                                                                                               |
+| ------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Balances            | Current token holdings with USD valuations ([https://docs.allium.so/allium-products/allium-developer/wallet-apis/balances](https://docs.allium.so/allium-products/allium-developer/wallet-apis/balances)) |
+| Transaction History | Raw transaction data ([https://docs.allium.so/allium-products/allium-developer/wallet-apis/activities](https://docs.allium.so/allium-products/allium-developer/wallet-apis/activities))                   |
+| Prices              | Realtime Token price data *(private preview*)                                                                                                                                                             |
+
+| Enriched Data Type            | Description                         |
+| ----------------------------- | ----------------------------------- |
+| PnL Calculators               | Portfolio performance metrics       |
+| Txn History with Annotations  | Decoded smart contract interactions |
+| DeFi Balances *(Coming Soon)* | Protocol positions and yields       |
+<Frame>
+![](https://docs.allium.so/~gitbook/image?url=https%3A%2F%2F137711553-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252FUrfZbzSRStJdjOp5DS3Z%252Fuploads%252FJXzXFuuyoYzdrC2CZBy0%252Fimage.png%3Falt%3Dmedia%26token%3Dedb4dbab-f036-44bb-8c62-eb171a05160c\&width=768\&dpr=4\&quality=100\&sign=dfd3ad7\&sv=2)
+</Frame>
+Leverage Allium's prebuilt realtime endpoints
+
+## (2) Custom SQL Endpoints
+
+For specialized data needs, Allium's SQL interface supports custom queries across their dataset. This enables flexible query construction, cross-chain data analysis, and complex aggregations and joins to meet specific requirements.
+<Frame>
+![](https://docs.allium.so/~gitbook/image?url=https%3A%2F%2F137711553-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252FUrfZbzSRStJdjOp5DS3Z%252Fuploads%252FZV2C3cx0hGDEjVTrh53F%252Fimage.png%3Falt%3Dmedia%26token%3D924a6457-c506-4f37-985a-9cfe13df2646\&width=768\&dpr=4\&quality=100\&sign=42c0ed6a\&sv=2)
+</Frame>
+Write your own SQL query for realtime data access
+
+## (3) Allium Datastreams
+
+Allium Datastreams delivers real-time event data through enterprise message brokers (Kafka/PubSub/SNS). This service provides instant transaction and event notifications, allows custom filtering and subscriptions, and ensures guaranteed message ordering for reliable data delivery.
+
+We highly recommend this approach over web hooks as (1) it **guarantees delivery** even if either side has an outage, (2) most event buses have a retention policy that allows **replay of historical messages**
+<Frame>
+![](https://docs.allium.so/~gitbook/image?url=https%3A%2F%2F137711553-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252FUrfZbzSRStJdjOp5DS3Z%252Fuploads%252FLlndazvy0NQjAogZT4Eq%252Fimage.png%3Falt%3Dmedia%26token%3Dc05c8a6f-e7fc-40a2-8adc-17c348694cf3\&width=768\&dpr=4\&quality=100\&sign=63e3d98\&sv=2)
+</Frame>
+Allium can push realtime data into your own environment through Kafka, PubSub or SNS
+
+## Usage Patterns
+
+Some users are happy with using the endpoints as is, though depending on the use case, some customers may want to use Datastreams to receive notifications and then do a more computationally "expensive" query post alert. They leverage a hybrid architecture where real-time event streams trigger SQL queries for a more comprehensive data pull.
+
+For example, when a streaming alert notifies an application about a new transaction, it can automatically initiate SQL queries to enrich that data with historical context or perform complex analytics.
+
+

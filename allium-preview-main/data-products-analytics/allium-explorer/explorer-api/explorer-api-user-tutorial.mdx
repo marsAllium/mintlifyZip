@@ -1,0 +1,33 @@
+---
+title: "Explorer API User Tutorial"
+---
+
+## 1. Introduction
+
+Go to [https://app.allium.so/explorer/api](https://app.allium.so/explorer/api)
+
+![](https://docs.allium.so/~gitbook/image?url=https%3A%2F%2F137711553-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252FUrfZbzSRStJdjOp5DS3Z%252Fuploads%252F7w5coVkgEjAjCRZ1vsxp%252Fimage.png%3Falt%3Dmedia%26token%3Dd3036fe3-2e25-45ad-bebc-6a6955a80def\&width=768\&dpr=4\&quality=100\&sign=759514b1\&sv=2)
+
+### 2. Generate API keys and run asynchronously
+
+Allium Explorer exposes the following endpoints through a REST API to fetch and poll your query run.
+
+1. POST /api/v1/explorer/queries/\{query\_id}/run-async: Execute the query asynchronously. This creates a query run ID for you to poll the status and results from
+
+2. GET /api/v1/explorer/query-runs/\{run\_id}/status: Get the status of a query run as an enumeration of created | queued | running | success | failed | canceled
+
+3. GET /api/v1/explorer/query-runs/\{run\_id}/results: Get the results of a query run with status success.
+
+The typical flow would be to
+
+1. Create a query run, and get the run\_id
+
+2. Poll the query run status using the run\_id in a while loop
+
+3. When the query run status is success, get the results
+
+![](https://docs.allium.so/~gitbook/image?url=https%3A%2F%2F137711553-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252FUrfZbzSRStJdjOp5DS3Z%252Fuploads%252FhBuOMRxtXDKCsSeW37vw%252Fimage.png%3Falt%3Dmedia%26token%3Da4922b3a-c302-4683-8cbe-36c282ce7e34\&width=768\&dpr=4\&quality=100\&sign=6f009a93\&sv=2)
+
+If any questions remain after this guide on how to get started, connect to our APIs, or retrieve specific data you have in mind, feel free to reach out to [support@allium.so](mailto:support@allium.so) at any time.
+
+

@@ -1,0 +1,83 @@
+---
+title: "Wormhole"
+---
+
+## Token Transfers
+
+`crosschain.bridges.wormhole_transfers` provides bridge transfer activity from Wormhole protocol.
+
+The underlying data indexed from Wormhole VAAs and Mayan-emitted messages.
+
+Backfills and verification are still ongoing for the wormhole bridge transfers schema
+
+### Sample Query
+
+Bridges transfer on Wormhole in the last 72 hours
+
+Copy
+
+```
+select 
+    date_trunc('hour', block_timestamp) as date,
+    destination_chain,
+    sum(usd_amount) as usd,
+    count(1) as c
+from crosschain.bridges.wormhole_transfers
+where block_timestamp >= current_timestamp - interval '3 days' 
+and status in ('completed', 'confirmed')
+group by all 
+order by 1 desc;
+```
+
+### Table Columns
+
+Unique key: block\_timestamp, unique\_id, transaction\_hash
+
+| Column Name                           | Type              | Description                                                                      |
+| ------------------------------------- | ----------------- | -------------------------------------------------------------------------------- |
+| bridge                                | VARCHAR           | name of bridge (wormhole)                                                        |
+| application\_protocol\_ids            | list\[VARCHAR]    | applications used in bridge transfer i.e. "MAYAN", "PORTAL\_TOKEN\_BRIDGE", etc. |
+| block\_timestamp                      | VARCHAR           | timestamp VAA was emitted                                                        |
+| transaction\_hash                     | VARCHAR           | hash of source or destination transaction                                        |
+| token\_amount                         | VARCHAR           | amount of token transferred                                                      |
+| token\_decimals                       | BIGINT            | decimals of token                                                                |
+| token\_address                        | VARCHAR           | address of token transferred                                                     |
+| token\_chain\_name                    | VARCHAR           | chain of token transferred                                                       |
+| token\_transfer\_from\_address        | VARCHAR           | token transfer from address                                                      |
+| token\_transfer\_to\_address          | VARCHAR           | token transfer to address                                                        |
+| unique\_id                            | VARCHAR           | unique id (chain id + transaction hash)                                          |
+| token\_symbol                         | VARCHAR           | symbol of token transferred                                                      |
+| token\_usd\_amount                    | VARCHAR           | usd amount of token transferred                                                  |
+| status                                | VARCHAR           | status of token transfer (e.g. completed, refunded, cancelled, etc.)             |
+| token\_transfer\_fee                  | VARCHAR           | bridge fee of token transfer                                                     |
+| token\_transfer\_gas\_token\_notional | VARCHAR           | fee gas notional                                                                 |
+| token\_transfer\_fee\_usd             | VARCHAR           | fee usd amount                                                                   |
+| token\_transfer\_fee\_address         | VARCHAR           | fee address recipient                                                            |
+| token\_transfer\_fee\_chain           | BIGINT            | fee process chain                                                                |
+| source\_chain\_number                 | BIGINT            | source transaction chain number                                                  |
+| source\_chain                         | VARCHAR           | source transaction chain                                                         |
+| source\_token\_address                | VARCHAR           | source token address                                                             |
+| source\_token\_amount                 | VARCHAR           | source token amount                                                              |
+| source\_fee                           | VARCHAR           | fee of source transaction                                                        |
+| source\_gas\_token\_notional          | VARCHAR           | fee gas usd price                                                                |
+| source\_transaction\_hash             | VARCHAR           | source transaction hash                                                          |
+| source\_transaction\_from             | VARCHAR           | source transaction from address                                                  |
+| source\_transaction\_to               | VARCHAR           | source transaction to address                                                    |
+| destination\_chain\_number            | BIGINT            | destination transaction chain number                                             |
+| destination\_chain                    | VARCHAR           | destination chain name                                                           |
+| destination\_token\_address           | VARCHAR           | destination transaction token address                                            |
+| destination\_token\_amount            | VARCHAR           | destination transaction token amount                                             |
+| destination\_fee                      | VARCHAR           | destination fee                                                                  |
+| destination\_gas\_token\_notional     | VARCHAR           | destination gas token usd price                                                  |
+| destination\_transaction\_hash        | VARCHAR           | destination transaction hash                                                     |
+| destination\_transaction\_from        | VARCHAR           | destination transaction from address                                             |
+| destination\_transaction\_to          | VARCHAR           | destination transaction to address                                               |
+| emitter\_address                      | VARCHAR           | wormhole emitter address                                                         |
+| emitter\_chain                        | VARCHAR           | wormhole emitter chain                                                           |
+| sequence                              | VARCHAR           | wormhole sequence id                                                             |
+| number\_of\_retries                   | BIGINT            | refetches for incomplete statuses                                                |
+| last\_fetched\_at                     | TIMESTAMP\_NTZ(9) | last fetched at for incomplete statuses                                          |
+| created\_at                           | TIMESTAMP\_NTZ(9) | created at timestamp                                                             |
+| updated\_at                           | TIMESTAMP\_NTZ(9) | updated at timestamp                                                             |
+
+
